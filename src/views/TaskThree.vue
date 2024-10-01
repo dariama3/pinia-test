@@ -2,17 +2,18 @@
 import { onMounted, ref, useTemplateRef } from 'vue'
 import { useTasksStore } from '@/stores/tasks'
 import TaskBlock from '@/components/TaskBlock.vue'
+import type { Task } from '@/task'
 
 const tasksStore = useTasksStore()
 const dialog = useTemplateRef('dialog')
 const form = useTemplateRef('form')
-const activeTaskId = ref(null)
+const activeTaskId = ref<number | null>(null)
 
-const title = ref('')
-const description = ref('')
-const id = ref('')
-const name = ref('')
-const email = ref('')
+const title = ref<string>('')
+const description = ref<string>('')
+const id = ref<number | null>(null)
+const name = ref<string>('')
+const email = ref<string>('')
 
 onMounted(() => {
   tasksStore.setTasks([
@@ -39,14 +40,25 @@ onMounted(() => {
   ])
 })
 
-function deleteTask(taskId) {
+function deleteTask(taskId: number): void {
+  const approve = confirm('Удалить запись?')
+
+  if (!approve) return
+
   tasksStore.deleteTask(taskId)
 }
-function addTask() {
-  form.value.reset()
+function addTask(): void {
+  title.value = ''
+  description.value = ''
+  id.value = null
+  name.value = ''
+  email.value = ''
+
+  activeTaskId.value = null
+
   dialog.value.showModal()
 }
-function editTask(task) {
+function editTask(task: Task): void {
   title.value = task.title
   description.value = task.description
   id.value = task.assignedUser.id
@@ -58,25 +70,27 @@ function editTask(task) {
   dialog.value.showModal()
 }
 
-function save() {
+function save(): void {
   if (activeTaskId.value !== null) {
     tasksStore.updateTask(activeTaskId.value, {
-      title,
-      description,
+      id: activeTaskId.value,
+      title: title.value,
+      description: description.value,
       assignedUser: {
-        id,
-        name,
-        email
+        id: id.value,
+        name: name.value,
+        email: email.value
       }
     })
   } else {
     tasksStore.addTask({
-      title,
-      description,
+      id: 0,
+      title: title.value,
+      description: description.value,
       assignedUser: {
-        id,
-        name,
-        email
+        id: id.value,
+        name: name.value,
+        email: email.value
       }
     })
   }
@@ -96,7 +110,7 @@ function cancel() {
   <div class="task-three">
     <h1>Список задач</h1>
     <ul class="list">
-      <li v-for="(task, index) in tasksStore.tasks" :key="task.id">
+      <li v-for="(task, index) in tasksStore.getTasks" :key="task.id">
         <TaskBlock :task="task" @delete-task="deleteTask(task.id)" @edit-task="editTask(task)" />
       </li>
     </ul>

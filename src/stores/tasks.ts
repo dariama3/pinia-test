@@ -1,31 +1,31 @@
 import { defineStore } from 'pinia'
+import type { Task } from '@/task'
+import { ref } from 'vue'
 
 export const useTasksStore = defineStore('tasks', {
   state: () => ({
-    tasks: []
+    tasks: ref<Task[]>([])
   }),
   getters: {
-    getTasks: (state) => state.tasks
+    getTasks: (state): Task[] => state.tasks
   },
   actions: {
-    setTasks(tasks: any) {
+    setTasks(tasks: Task[]): void {
       this.tasks = tasks
     },
-    addTask(data: any) {
-      // @ts-ignore
-      this.tasks.push({ id: this.tasks.length, ...data })
+    addTask(task: Task): void {
+      this.tasks.push({ ...task, id: this.tasks.length })
     },
-    updateTask(taskId: number, data: any) {
+    updateTask(taskId: number, task: Task): void {
       const index = this.tasks.findIndex((task: any) => task.id === taskId)
 
       if (index === -1) {
         return
       }
 
-      // @ts-ignore
-      this.tasks[index] = data
+      this.tasks[index] = task
     },
-    deleteTask(taskId: number) {
+    deleteTask(taskId: number): void {
       const index = this.tasks.findIndex((task: any) => task.id === taskId)
 
       if (index === -1) {

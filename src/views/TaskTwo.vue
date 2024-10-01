@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import UserBlock from '@/components/UserBlock.vue'
+import type { User } from '@/user'
 
-const users = ref([])
+const users = ref<User[]>([])
 
 onMounted(async () => {
   const response = await fetch('https://jsonplaceholder.typicode.com/users')
   users.value = await response.json()
 })
-function editUser(index) {
+function editUser(index: number): void {
   const name = prompt('Введите имя', users.value[index].name)
   if (name === null) {
     return
@@ -22,10 +23,14 @@ function editUser(index) {
   users.value[index].name = name
   users.value[index].company.name = company
 }
-function deleteUser(index) {
+function deleteUser(index: number): void {
+  const approve = confirm('Удалить запись?')
+
+  if (!approve) return
+
   users.value.splice(index, 1)
 }
-function addUser() {
+function addUser(): void {
   const name = prompt('Введите имя')
   if (name === null) {
     return

@@ -1,23 +1,27 @@
 <script setup lang="ts">
-const props = defineProps({
-  task: Object
-})
-defineEmits(['delete-task', 'edit-task'])
+import type { Task } from '@/task'
+
+defineProps<{
+  task: Task
+}>()
+
+const emit = defineEmits<{
+  (event: 'delete-task'): void
+  (event: 'edit-task'): void
+}>()
 </script>
 
 <template>
   <div class="task">
-    <strong>{{ props.task.title }}</strong>
-    <p>{{ props.task.description }}</p>
+    <strong>{{ task.title }}</strong>
+    <p>{{ task.description }}</p>
     <div>
-      {{ props.task.assignedUser.id }}: {{ props.task.assignedUser.name }} ({{
-        props.task.assignedUser.email
-      }})
+      {{ task.assignedUser.id }}: {{ task.assignedUser.name }} ({{ task.assignedUser.email }})
     </div>
   </div>
   <div>
-    <button @click="$emit('edit-task')">Изменить</button>
-    <button @click="$emit('delete-task')">x</button>
+    <button @click="emit('edit-task')">Изменить</button>
+    <button @click="emit('delete-task')">x</button>
   </div>
 </template>
 

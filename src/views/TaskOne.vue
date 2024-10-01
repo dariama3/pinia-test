@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
-const selectedOption = ref('')
-const saveToCookie = ref(false)
+const selectedOption = ref<string>('')
+const saveToCookie = ref<boolean>(false)
 
-const setCookie = (name, value, minutes) => {
+const setCookie = (name: string, value: string, minutes: number): void => {
   const date = new Date()
   date.setTime(date.getTime() + minutes * 60 * 1000)
   const expires = 'expires=' + date.toUTCString()
   document.cookie = name + '=' + value + ';' + expires + ';path=/'
 }
 
-const getCookie = (name) => {
+const getCookie = (name: string): string | null => {
   const cname = name + '='
   const cookies = document.cookie.split(';')
   for (let i = 0; i < cookies.length; i++) {
@@ -22,17 +22,17 @@ const getCookie = (name) => {
   return null
 }
 
-const deleteCookie = (name) => {
+const deleteCookie = (name: string): void => {
   document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;'
 }
 
-const onSelectChange = () => {
+const onSelectChange = (): void => {
   if (saveToCookie.value) {
     setCookie('selectedOption', selectedOption.value, 15)
   }
 }
 
-const onCheckboxChange = () => {
+const onCheckboxChange = (): void => {
   if (!saveToCookie.value) {
     deleteCookie('selectedOption')
   } else if (selectedOption.value) {
