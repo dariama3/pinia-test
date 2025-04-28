@@ -6,7 +6,6 @@ import type { Task } from '@/task'
 
 const tasksStore = useTasksStore()
 const dialog = useTemplateRef('dialog')
-const form = useTemplateRef('form')
 const activeTaskId = ref<number | null>(null)
 
 const title = ref<string>('')
@@ -41,7 +40,7 @@ onMounted(() => {
 })
 
 function deleteTask(taskId: number): void {
-  const approve = confirm('Удалить запись?')
+  const approve = confirm('Delete task?')
 
   if (!approve) return
 
@@ -56,7 +55,7 @@ function addTask(): void {
 
   activeTaskId.value = null
 
-  dialog.value.showModal()
+  dialog.value?.showModal()
 }
 function editTask(task: Task): void {
   title.value = task.title
@@ -67,7 +66,7 @@ function editTask(task: Task): void {
 
   activeTaskId.value = task.id
 
-  dialog.value.showModal()
+  dialog.value?.showModal()
 }
 
 function save(): void {
@@ -77,7 +76,7 @@ function save(): void {
       title: title.value,
       description: description.value,
       assignedUser: {
-        id: id.value,
+        id: Number(id.value),
         name: name.value,
         email: email.value
       }
@@ -88,7 +87,7 @@ function save(): void {
       title: title.value,
       description: description.value,
       assignedUser: {
-        id: id.value,
+        id: Number(id.value),
         name: name.value,
         email: email.value
       }
@@ -97,51 +96,51 @@ function save(): void {
 
   activeTaskId.value = null
 
-  dialog.value.close()
+  dialog.value?.close()
 }
 function cancel() {
   activeTaskId.value = null
 
-  dialog.value.close()
+  dialog.value?.close()
 }
 </script>
 
 <template>
   <div class="task-three">
-    <h1>Список задач</h1>
+    <h1>Tasks list</h1>
     <ul class="list">
-      <li v-for="(task, index) in tasksStore.getTasks" :key="task.id">
+      <li v-for="task in tasksStore.getTasks" :key="task.id">
         <TaskBlock :task="task" @delete-task="deleteTask(task.id)" @edit-task="editTask(task)" />
       </li>
     </ul>
-    <button class="add-button" @click="addTask">Добавить</button>
+    <button class="add-button" @click="addTask">Add</button>
     <dialog ref="dialog">
-      <form @submit.prevent="save" ref="form">
+      <form @submit.prevent="save">
         <label class="required">
-          <span>Тайтл</span>
+          <span>Title</span>
           <input name="title" type="text" v-model="title" required />
         </label>
         <label class="required">
-          <span>Описание</span>
+          <span>Description</span>
           <input name="description" type="text" v-model="description" required />
         </label>
         <fieldset>
-          <legend>Пользователь</legend>
+          <legend>User</legend>
           <label>
-            <span>Айди</span>
+            <span>Id</span>
             <input name="id" type="text" v-model="id" />
           </label>
           <label>
-            <span>Имя</span>
+            <span>Name</span>
             <input name="name" type="text" v-model="name" />
           </label>
           <label>
-            <span>Почта</span>
+            <span>Email</span>
             <input name="email" type="email" v-model="email" />
           </label>
         </fieldset>
-        <button type="submit">Сохранить</button>
-        <button type="button" @click="cancel">Отмена</button>
+        <button type="submit">Save</button>
+        <button type="button" @click="cancel">Cancel</button>
       </form>
     </dialog>
   </div>

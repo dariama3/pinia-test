@@ -10,12 +10,12 @@ onMounted(async () => {
   users.value = await response.json()
 })
 function editUser(index: number): void {
-  const name = prompt('Введите имя', users.value[index].name)
+  const name = prompt('Enter name', users.value[index].name)
   if (name === null) {
     return
   }
 
-  const company = prompt('Введите компанию', users.value[index].company.name)
+  const company = prompt('Enter company', users.value[index].company.name)
   if (company === null) {
     return
   }
@@ -24,19 +24,19 @@ function editUser(index: number): void {
   users.value[index].company.name = company
 }
 function deleteUser(index: number): void {
-  const approve = confirm('Удалить запись?')
+  const approve = confirm('Delete record?')
 
   if (!approve) return
 
   users.value.splice(index, 1)
 }
 function addUser(): void {
-  const name = prompt('Введите имя')
+  const name = prompt('Enter name')
   if (name === null) {
     return
   }
 
-  const company = prompt('Введите компанию')
+  const company = prompt('Enter company')
   if (company === null) {
     return
   }
@@ -52,13 +52,13 @@ function addUser(): void {
 
 <template>
   <div class="task-two">
-    <h1>Список пользователей</h1>
+    <h1>Users list</h1>
     <ul class="list">
-      <li v-for="(user, index) in users" :key="user.id">
+      <li v-for="(user, index) in users" :key="user.name">
         <UserBlock :user="user" @delete-user="deleteUser(index)" @edit-user="editUser(index)" />
       </li>
     </ul>
-    <button class="add-button" @click="addUser">Добавить</button>
+    <button class="add-button" @click="addUser">Add</button>
   </div>
 </template>
 

@@ -20,7 +20,7 @@ const emit = defineEmits<{
     </div>
   </div>
   <div>
-    <button @click="emit('edit-task')">Изменить</button>
+    <button @click="emit('edit-task')">Change</button>
     <button @click="emit('delete-task')">x</button>
   </div>
 </template>

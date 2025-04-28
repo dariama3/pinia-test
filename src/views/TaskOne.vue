@@ -50,16 +50,16 @@ onMounted(() => {
 
 <template>
   <div class="task-one">
-    <label for="data-select">Выберите опцию:</label>
+    <label for="data-select">Choose an option:</label>
     <select id="data-select" v-model="selectedOption" @change="onSelectChange">
-      <option value="option1">Опция 1</option>
-      <option value="option2">Опция 2</option>
-      <option value="option3">Опция 3</option>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
     </select>
 
     <label>
       <input type="checkbox" v-model="saveToCookie" @change="onCheckboxChange" />
-      Сохранить в cookie
+      Save to cookie
     </label>
   </div>
 </template>

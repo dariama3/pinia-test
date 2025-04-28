@@ -16,7 +16,7 @@ const emit = defineEmits<{
     ><strong>{{ user.name }}</strong> - {{ user.company.name }}</span
   >
   <div>
-    <button @click="emit('edit-user')">Изменить</button>
+    <button @click="emit('edit-user')">Change</button>
     <button @click="emit('delete-user')">x</button>
   </div>
 </template>
